@@ -15,18 +15,37 @@ import { Box, Flex, Table } from "@chakra-ui/react";
 import { useMeasure } from "@/hooks/useMeasure";
 import { renderToString } from "react-dom/server";
 
+/**
+ * Props for the InfiniteTable component.
+ * Extends standard HTML table attributes with additional props for infinite scrolling functionality.
+ */
 type InfiniteTableProps = React.TableHTMLAttributes<HTMLTableElement> & {
+  /** The data to display in the table, using React Query's InfiniteData type */
   data: InfiniteData<any, unknown> | undefined;
+  /** Column definitions for the table using TanStack Table */
   columns: ColumnDef<any>[];
+  /** Whether the table is currently loading more data */
   isLoading: boolean;
+  /** Function to fetch the next page of data */
   fetchNextPage: () => void;
+  /** Total number of rows in the dataset */
   totalRows: number;
+  /** Whether the table should take up the full height of its container */
   fullHeight?: boolean;
+  /** Callback function when a row is clicked */
   onRowClick?: (row: Row<any>) => void;
 };
 
-const ESTIMATE_ROW_HEIGHT = 36; //estimate row height for accurate scrollbar dragging
+/**
+ * Estimated height of a table row in pixels.
+ * Used for accurate scrollbar calculations in virtualized scrolling.
+ */
+const ESTIMATE_ROW_HEIGHT = 36;
 
+/**
+ * A virtualized table component that supports infinite scrolling.
+ * This component efficiently renders large datasets by only rendering the visible portion of the table.
+ */
 export const InfiniteTable = React.forwardRef<
   HTMLTableElement,
   InfiniteTableProps
