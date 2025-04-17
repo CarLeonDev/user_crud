@@ -22,6 +22,7 @@ type InfiniteTableProps = React.TableHTMLAttributes<HTMLTableElement> & {
   fetchNextPage: () => void;
   totalRows: number;
   fullHeight?: boolean;
+  onRowClick?: (row: Row<any>) => void;
 };
 
 const ESTIMATE_ROW_HEIGHT = 36; //estimate row height for accurate scrollbar dragging
@@ -31,7 +32,15 @@ export const InfiniteTable = React.forwardRef<
   InfiniteTableProps
 >(
   (
-    { data, columns, isLoading, fetchNextPage, totalRows, fullHeight = false },
+    {
+      data,
+      columns,
+      isLoading,
+      fetchNextPage,
+      totalRows,
+      fullHeight = false,
+      onRowClick,
+    },
     externalRef
   ) => {
     const internalRef = useRef<HTMLTableElement>(null);
@@ -129,6 +138,7 @@ export const InfiniteTable = React.forwardRef<
                   <Table.ColumnHeader
                     key={header.id}
                     display="flex"
+                    bg="bg.subtle"
                     w={`${header.column.getSize()}px`}
                   >
                     {flexRender(
@@ -157,10 +167,13 @@ export const InfiniteTable = React.forwardRef<
                   key={row.id}
                   ref={(node) => rowVirtualizer.measureElement(node)} //measure dynamic row height
                   data-index={virtualRow.index} //needed for dynamic row height measurement
+                  className="group"
                   position="absolute"
                   display="flex"
                   w="100%"
                   transform={`translateY(${virtualRow.start}px)`} //this should always be a `style` as it changes on scroll
+                  cursor={onRowClick ? "pointer" : "default"}
+                  onClick={() => onRowClick?.(row)}
                 >
                   {row.getVisibleCells().map((cell) => {
                     const cellValue = flexRender(
@@ -173,6 +186,10 @@ export const InfiniteTable = React.forwardRef<
                         key={cell.id}
                         display="flex"
                         w={`${cell.column.getSize()}px`}
+                        _groupHover={{
+                          bg: "bg.emphasized",
+                          borderColor: "border.emphasized",
+                        }}
                       >
                         <Box
                           w="100%"
@@ -197,6 +214,7 @@ export const InfiniteTable = React.forwardRef<
               >
                 <Table.Cell
                   display="flex"
+                  w="100%"
                   h={`${ESTIMATE_ROW_HEIGHT}px`}
                   gap={2}
                 >
@@ -207,7 +225,7 @@ export const InfiniteTable = React.forwardRef<
             )}
 
             {!isLoading && isEmpty && (
-              <Table.Row display="flex">
+              <Table.Row display="flex" w="100%">
                 <Table.Cell>No data available</Table.Cell>
               </Table.Row>
             )}

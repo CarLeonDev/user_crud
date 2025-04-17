@@ -38,7 +38,7 @@ const columns: ColumnDef<User, any>[] = [
   },
 ];
 
-export const Dashboard = () => {
+export const UsersView = () => {
   const [authToken] = useLocalStorage<string | null>(AUTH_TOKEN_KEY, null);
   const router = useRouter();
 
@@ -75,7 +75,7 @@ export const Dashboard = () => {
       py={4}
       maxW="100%"
     >
-      <Heading size="lg">Users</Heading>
+      <Heading size="2xl">Users</Heading>
 
       <InfiniteTable
         fullHeight
@@ -84,6 +84,9 @@ export const Dashboard = () => {
         fetchNextPage={fetchNextPage}
         isLoading={isLoading || isFetching || isFetchingNextPage}
         totalRows={totalRows}
+        onRowClick={(row) => {
+          router.push(`/users/${row.id}`);
+        }}
       />
     </Flex>
   );

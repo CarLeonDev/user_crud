@@ -1,26 +1,26 @@
-import { Inter } from "next/font/google"
-import Provider from "./provider"
-import { Grid, Link, Stack } from "@chakra-ui/react"
-import { UserRound } from "lucide-react"
-import { ThemeModeToggle } from "@/components/ThemeModeToggle"
-import { LogoutButton } from "@/components/LogoutButton"
+import { Inter } from "next/font/google";
+import Provider from "./provider";
+import { Grid, Link, Stack } from "@chakra-ui/react";
+import { UserRound } from "lucide-react";
+import { ThemeModeToggle } from "@/components/ThemeModeToggle";
+import { LogoutButton } from "@/components/LogoutButton";
 
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
-})
+});
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html className={inter.className} suppressHydrationWarning>
       <head />
       <body>
         <Provider>
-          <Grid templateRows="3.8rem auto" w="100vw" h="100vh">
+          <Grid templateRows="3.8rem 1fr" w="100vw" h="100vh">
             <Stack
               as="nav"
               position="sticky"
@@ -30,12 +30,14 @@ export default function RootLayout({
               direction="row"
               justifyContent="space-between"
               alignItems="center"
-              bg="background.primary"
+              bg="bg.subtle"
               borderBottomWidth="1px"
               borderBottomColor="border.disabled"
               zIndex={100}
             >
-              <Link href="/"><UserRound /></Link>
+              <Link href="/">
+                <UserRound />
+              </Link>
 
               <Stack direction="row" gap={2}>
                 <ThemeModeToggle />
@@ -52,5 +54,5 @@ export default function RootLayout({
         </Provider>
       </body>
     </html>
-  )
+  );
 }
