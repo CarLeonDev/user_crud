@@ -20,7 +20,7 @@ export default function RootLayout({
       <head />
       <body>
         <Provider>
-          <Grid templateRows="3.8rem 1fr" height="100vh">
+          <Grid templateRows="3.8rem auto" w="100vw" h="100vh">
             <Stack
               as="nav"
               position="sticky"
@@ -45,7 +45,7 @@ export default function RootLayout({
               </Stack>
             </Stack>
 
-            <Stack as="main">
+            <Stack as="main" position="relative" w="100vw">
               {children}
             </Stack>
           </Grid>
