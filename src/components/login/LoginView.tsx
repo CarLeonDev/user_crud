@@ -34,7 +34,7 @@ export const LoginView = () => {
   }, [authToken]);
 
   return (
-    <Stack flex={1} justifyContent="center" px={6} py={4}>
+    <Stack flex={1} justifyContent="center">
       <Card.Root
         flexDirection="column"
         w="100%"

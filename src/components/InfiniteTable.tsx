@@ -166,6 +166,12 @@ export const InfiniteTable = React.forwardRef<
                     )}
                   </Table.ColumnHeader>
                 ))}
+                <Table.ColumnHeader
+                  display="flex"
+                  flex={1}
+                  bg="bg.subtle"
+                  w="100%"
+                ></Table.ColumnHeader>
               </Table.Row>
             ))}
           </Table.Header>
@@ -222,6 +228,15 @@ export const InfiniteTable = React.forwardRef<
                       </Table.Cell>
                     );
                   })}
+                  <Table.Cell
+                    display="flex"
+                    flex={1}
+                    w="100%"
+                    _groupHover={{
+                      bg: "bg.emphasized",
+                      borderColor: "border.emphasized",
+                    }}
+                  />
                 </Table.Row>
               );
             })}

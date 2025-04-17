@@ -8,7 +8,7 @@ import { User, UsersApiResponse } from "@/types/users";
 import { getUsers } from "@/services/users";
 import { useInfiniteQuery, keepPreviousData } from "@tanstack/react-query";
 import { InfiniteTable } from "@/components/InfiniteTable";
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef, Row } from "@tanstack/react-table";
 import { Flex, Heading } from "@chakra-ui/react";
 
 const columns: ColumnDef<User, any>[] = [
@@ -56,6 +56,10 @@ export const UsersView = () => {
       placeholderData: keepPreviousData,
     });
 
+  const handleRowClick = (row: Row<User>) => {
+    router.push(`/users/${row.original.id}`);
+  };
+
   useEffect(() => {
     if (authToken) return;
 
@@ -67,12 +71,9 @@ export const UsersView = () => {
   return (
     <Flex
       position="relative"
-      alignSelf="center"
       flex={1}
       flexDirection="column"
       gap={3}
-      px={6}
-      py={4}
       maxW="100%"
     >
       <Heading size="2xl">Users</Heading>
@@ -84,9 +85,7 @@ export const UsersView = () => {
         fetchNextPage={fetchNextPage}
         isLoading={isLoading || isFetching || isFetchingNextPage}
         totalRows={totalRows}
-        onRowClick={(row) => {
-          router.push(`/users/${row.id}`);
-        }}
+        onRowClick={handleRowClick}
       />
     </Flex>
   );
