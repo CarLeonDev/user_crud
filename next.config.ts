@@ -6,6 +6,11 @@ const nextConfig: NextConfig = {
     externalDir: true,
     optimizePackageImports: ["@chakra-ui/react"],
   },
+  async redirects() {
+    return [
+      { source: "/", destination: "/dashboard", permanent: false },
+    ];
+  },
 };
 
 export default nextConfig;
