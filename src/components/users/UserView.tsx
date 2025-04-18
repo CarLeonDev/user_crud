@@ -1,5 +1,5 @@
 "use client";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { getUser } from "@/services/users";
 import { Loading } from "../ui/Loading";
@@ -13,18 +13,55 @@ import {
   Stack,
   Text,
   Separator,
+  Alert,
+  Button,
+  EmptyState,
 } from "@chakra-ui/react";
-import { MailIcon, MapPinIcon, PhoneIcon, GlobeIcon } from "lucide-react";
+import {
+  MailIcon,
+  MapPinIcon,
+  PhoneIcon,
+  GlobeIcon,
+  UserXIcon,
+  ArrowLeftIcon,
+} from "lucide-react";
 
 export const UserView = () => {
   const { id } = useParams();
-
+  const router = useRouter();
   const { data, isLoading } = useQuery({
     queryKey: ["user", id],
     queryFn: () => getUser(id as string),
   });
 
   if (isLoading) return <Loading />;
+
+  if (!data?.id) {
+    return (
+      <EmptyState.Root>
+        <EmptyState.Content>
+          <EmptyState.Indicator>
+            <UserXIcon size={24} />
+          </EmptyState.Indicator>
+
+          <EmptyState.Title>User not found</EmptyState.Title>
+
+          <EmptyState.Description
+            gap={2}
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+          >
+            The user you are looking for does not exist.
+            <Button size="xs" variant="outline" onClick={() => router.back()}>
+              <ArrowLeftIcon size={16} />
+              Go back
+            </Button>
+          </EmptyState.Description>
+        </EmptyState.Content>
+      </EmptyState.Root>
+    );
+  }
 
   return (
     <Stack direction="row" justifyContent="center">
@@ -38,7 +75,7 @@ export const UserView = () => {
             <Stack direction="column" gap={0}>
               <Heading>{data?.name}</Heading>
               <Text fontSize="sm" color="fg.muted">
-                {data?.username}
+                @{data?.username}
               </Text>
             </Stack>
           </Stack>
@@ -118,25 +155,25 @@ export const UserView = () => {
                 >
                   <Field.Label gap={2}>Street</Field.Label>
 
-                  <Input value={data?.address.street} disabled />
+                  <Input value={data?.address?.street} disabled />
                 </Field.Root>
 
                 <Field.Root gridColumn="span 1">
                   <Field.Label gap={2}>Suite</Field.Label>
 
-                  <Input value={data?.address.suite} disabled />
+                  <Input value={data?.address?.suite} disabled />
                 </Field.Root>
 
                 <Field.Root gridColumn="span 1">
                   <Field.Label gap={2}>City</Field.Label>
 
-                  <Input value={data?.address.city} disabled />
+                  <Input value={data?.address?.city} disabled />
                 </Field.Root>
 
                 <Field.Root gridColumn="span 1">
                   <Field.Label gap={2}>ZipCode</Field.Label>
 
-                  <Input value={data?.address.zipcode} disabled />
+                  <Input value={data?.address?.zipcode} disabled />
                 </Field.Root>
               </Grid>
             </Stack>
