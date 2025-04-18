@@ -7,11 +7,16 @@ export const getUsers = async ({ page, size }: { page: number, size: number }) =
   const data = await response.json();
 
   return {
-    data: data.map((user: any, index: number) => ({
-      ...user,
-      id: index + ((page - 1) * size),
-    })),
-    total: 1000,
+    data: data,
+    total: data.length,
   };
+};
+
+
+export const getUser = async (id: string) => {
+  const response = await fetch(`${API_URL}/users/${id}`);
+  const data = await response.json();
+  
+  return data;
 };
 

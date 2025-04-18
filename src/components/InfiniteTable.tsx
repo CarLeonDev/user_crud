@@ -171,7 +171,8 @@ export const InfiniteTable = React.forwardRef<
                   flex={1}
                   bg="bg.subtle"
                   w="100%"
-                ></Table.ColumnHeader>
+                  px={0}
+                />
               </Table.Row>
             ))}
           </Table.Header>
@@ -228,10 +229,12 @@ export const InfiniteTable = React.forwardRef<
                       </Table.Cell>
                     );
                   })}
+
                   <Table.Cell
                     display="flex"
                     flex={1}
                     w="100%"
+                    px={0}
                     _groupHover={{
                       bg: "bg.emphasized",
                       borderColor: "border.emphasized",
