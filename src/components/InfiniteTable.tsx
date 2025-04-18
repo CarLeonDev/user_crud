@@ -10,9 +10,22 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { Loading } from "@/components/ui/Loading";
 import React from "react";
-import { Box, Flex, Table } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  IconButton,
+  IconButtonProps,
+  Table,
+} from "@chakra-ui/react";
 import { useMeasure } from "@/hooks/useMeasure";
 import { renderToString } from "react-dom/server";
+
+type Action = {
+  label: string;
+  icon: React.ReactNode;
+  colorPalette?: IconButtonProps["colorPalette"];
+  onClick: (row: Row<any>) => void;
+};
 
 /**
  * Props for the InfiniteTable component.
@@ -31,6 +44,8 @@ type InfiniteTableProps = React.TableHTMLAttributes<HTMLTableElement> & {
   totalRows: number;
   /** Whether the table should take up the full height of its container */
   fullHeight?: boolean;
+  /** Actions to display in the last column */
+  actions?: Action[];
   /** Callback function when a row is clicked */
   onRowClick?: (row: Row<any>) => void;
 };
@@ -40,6 +55,11 @@ type InfiniteTableProps = React.TableHTMLAttributes<HTMLTableElement> & {
  * Used for accurate scrollbar calculations in virtualized scrolling.
  */
 const ESTIMATE_ROW_HEIGHT = 36;
+
+/**
+ * The width of an action button in pixels.
+ */
+const ACTION_BUTTON_WIDTH = 36;
 
 /**
  * A virtualized table component that supports infinite scrolling.
@@ -58,6 +78,7 @@ export const InfiniteTable = React.forwardRef<
       totalRows,
       fullHeight = false,
       onRowClick,
+      actions,
     },
     externalRef
   ) => {
@@ -159,12 +180,16 @@ export const InfiniteTable = React.forwardRef<
                     )}
                   </Table.ColumnHeader>
                 ))}
+
                 <Table.ColumnHeader
+                  position="sticky"
+                  right={0}
                   display="flex"
                   flex={1}
                   bg="bg.subtle"
-                  w="100%"
-                  px={0}
+                  boxSizing="content-box"
+                  w={`${(actions?.length ?? 0) * ACTION_BUTTON_WIDTH}px`}
+                  px={actions?.length ? 2 : 0}
                 />
               </Table.Row>
             ))}
@@ -182,18 +207,13 @@ export const InfiniteTable = React.forwardRef<
               const row = rows[virtualRow.index] as Row<any>;
 
               return (
-                <Table.Row
+                <TableRow
                   key={row.id}
                   ref={(node) => rowVirtualizer.measureElement(node)} //measure dynamic row height
                   data-index={virtualRow.index} //needed for dynamic row height measurement
                   position="absolute"
                   display="flex"
                   w="100%"
-                  bg={row.original.id % 2 === 0 ? "bg.muted" : ""}
-                  _hover={{
-                    bg: "bg.emphasized",
-                    borderColor: "border.emphasized",
-                  }}
                   style={{
                     //this should always be a `style` as it changes on scroll
                     transform: `translateY(${virtualRow.start}px)`,
@@ -208,10 +228,11 @@ export const InfiniteTable = React.forwardRef<
                     );
 
                     return (
-                      <Table.Cell
+                      <TableCell
                         key={cell.id}
                         display="flex"
                         w={`${cell.column.getSize()}px`}
+                        isOdd={virtualRow.index % 2 === 0}
                       >
                         <Box
                           w="100%"
@@ -222,23 +243,50 @@ export const InfiniteTable = React.forwardRef<
                         >
                           {cellValue}
                         </Box>
-                      </Table.Cell>
+                      </TableCell>
                     );
                   })}
 
-                  <Table.Cell display="flex" flex={1} w="100%" px={0} />
-                </Table.Row>
+                  <TableCell
+                    position="sticky"
+                    right={0}
+                    display="flex"
+                    flex={1}
+                    w="100%"
+                    py={0}
+                    justifyContent="flex-end"
+                    isOdd={virtualRow.index % 2 === 0}
+                    px={actions?.length ? 2 : 0}
+                  >
+                    {actions?.map((action) => (
+                      <IconButton
+                        key={action.label}
+                        variant="ghost"
+                        size="sm"
+                        colorPalette={action.colorPalette}
+                        aria-label={action.label}
+                        title={action.label}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          action.onClick(row);
+                        }}
+                      >
+                        {action.icon}
+                      </IconButton>
+                    ))}
+                  </TableCell>
+                </TableRow>
               );
             })}
 
             {isLoading && (
-              <Table.Row
+              <TableRow
                 display="flex"
                 style={{
                   transform: `translateY(${rowVirtualizer.getTotalSize()}px)`,
                 }}
               >
-                <Table.Cell
+                <TableCell
                   display="flex"
                   w="100%"
                   h={`${ESTIMATE_ROW_HEIGHT}px`}
@@ -246,18 +294,55 @@ export const InfiniteTable = React.forwardRef<
                 >
                   <Loading size="sm" />
                   <span>Loading...</span>
-                </Table.Cell>
-              </Table.Row>
+                </TableCell>
+              </TableRow>
             )}
 
             {!isLoading && isEmpty && (
-              <Table.Row display="flex" w="100%">
-                <Table.Cell w="100%">No data available</Table.Cell>
-              </Table.Row>
+              <TableRow display="flex" w="100%">
+                <TableCell w="100%">No data available</TableCell>
+              </TableRow>
             )}
           </Table.Body>
         </Table.Root>
       </Flex>
+    );
+  }
+);
+
+const TableRow = React.forwardRef<HTMLTableRowElement, Table.RowProps>(
+  ({ children, ...props }, ref) => {
+    return (
+      <Table.Row
+        {...props}
+        ref={ref}
+        className={`${props.className ?? ""} group`}
+      >
+        {children}
+      </Table.Row>
+    );
+  }
+);
+
+type TableCellProps = React.TableHTMLAttributes<HTMLTableCellElement> &
+  Table.CellProps & {
+    isOdd?: boolean;
+  };
+
+const TableCell = React.forwardRef<HTMLTableCellElement, TableCellProps>(
+  ({ children, isOdd, ...props }, ref) => {
+    return (
+      <Table.Cell
+        {...props}
+        ref={ref}
+        bg={isOdd ? "bg.muted" : "bg"}
+        _groupHover={{
+          bg: "bg.emphasized",
+          borderColor: "border.emphasized",
+        }}
+      >
+        {children}
+      </Table.Cell>
     );
   }
 );

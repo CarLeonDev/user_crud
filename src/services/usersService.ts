@@ -1,4 +1,5 @@
 import { API_URL } from "@/constants";
+import { UsersApiResponse } from "@/types/users";
 
 export const getUsers = async ({ page, size }: { page: number, size: number }) => {
   // TODO: add pagination to the response
@@ -14,11 +15,11 @@ export const getUsers = async ({ page, size }: { page: number, size: number }) =
   //   })),
   //   total: 1000,
   // };
-  
+
   return {
     data: data,
     total: data.length,
-  };
+  } as UsersApiResponse;
 };
 
 
