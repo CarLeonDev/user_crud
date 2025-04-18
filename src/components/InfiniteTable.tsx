@@ -1,4 +1,3 @@
-import { InfiniteData } from "@tanstack/react-query";
 import {
   ColumnDef,
   flexRender,
@@ -20,8 +19,8 @@ import { renderToString } from "react-dom/server";
  * Extends standard HTML table attributes with additional props for infinite scrolling functionality.
  */
 type InfiniteTableProps = React.TableHTMLAttributes<HTMLTableElement> & {
-  /** The data to display in the table, using React Query's InfiniteData type */
-  data: InfiniteData<any, unknown> | undefined;
+  /** The data to display in the table */
+  data: any[];
   /** Column definitions for the table using TanStack Table */
   columns: ColumnDef<any>[];
   /** Whether the table is currently loading more data */
@@ -70,12 +69,7 @@ export const InfiniteTable = React.forwardRef<
       [externalRef, internalRef]
     ) as React.RefObject<HTMLTableElement>;
 
-    const flatData = useMemo(
-      () => data?.pages?.flatMap((page) => page.data) ?? [],
-      [data]
-    );
-
-    const totalFetched = flatData.length;
+    const totalFetched = data.length;
 
     // called on scroll and possibly on mount to fetch more data as the user scrolls and reaches bottom of table
     const fetchMoreOnBottomReached = useCallback(
@@ -97,7 +91,7 @@ export const InfiniteTable = React.forwardRef<
     );
 
     const table = useReactTable({
-      data: flatData,
+      data,
       columns,
       getCoreRowModel: getCoreRowModel(),
       getSortedRowModel: getSortedRowModel(),
