@@ -1,7 +1,7 @@
 "use client";
 import { useParams, useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { getUser } from "@/services/users";
+import { getUser } from "@/services/usersService";
 import { Loading } from "../ui/Loading";
 import {
   Avatar,

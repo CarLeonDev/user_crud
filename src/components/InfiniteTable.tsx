@@ -126,7 +126,6 @@ export const InfiniteTable = React.forwardRef<
           ref={ref}
           variant="outline"
           size="sm"
-          striped
           position="relative"
           display="grid"
           gridAutoRows="min-content"
@@ -187,11 +186,18 @@ export const InfiniteTable = React.forwardRef<
                   key={row.id}
                   ref={(node) => rowVirtualizer.measureElement(node)} //measure dynamic row height
                   data-index={virtualRow.index} //needed for dynamic row height measurement
-                  className="group"
                   position="absolute"
                   display="flex"
                   w="100%"
-                  transform={`translateY(${virtualRow.start}px)`} //this should always be a `style` as it changes on scroll
+                  bg={row.original.id % 2 === 0 ? "bg.muted" : ""}
+                  _hover={{
+                    bg: "bg.emphasized",
+                    borderColor: "border.emphasized",
+                  }}
+                  style={{
+                    //this should always be a `style` as it changes on scroll
+                    transform: `translateY(${virtualRow.start}px)`,
+                  }}
                   cursor={onRowClick ? "pointer" : "default"}
                   onClick={() => onRowClick?.(row)}
                 >
@@ -206,10 +212,6 @@ export const InfiniteTable = React.forwardRef<
                         key={cell.id}
                         display="flex"
                         w={`${cell.column.getSize()}px`}
-                        _groupHover={{
-                          bg: "bg.emphasized",
-                          borderColor: "border.emphasized",
-                        }}
                       >
                         <Box
                           w="100%"
@@ -224,16 +226,7 @@ export const InfiniteTable = React.forwardRef<
                     );
                   })}
 
-                  <Table.Cell
-                    display="flex"
-                    flex={1}
-                    w="100%"
-                    px={0}
-                    _groupHover={{
-                      bg: "bg.emphasized",
-                      borderColor: "border.emphasized",
-                    }}
-                  />
+                  <Table.Cell display="flex" flex={1} w="100%" px={0} />
                 </Table.Row>
               );
             })}
@@ -241,7 +234,9 @@ export const InfiniteTable = React.forwardRef<
             {isLoading && (
               <Table.Row
                 display="flex"
-                transform={`translateY(${rowVirtualizer.getTotalSize()}px)`}
+                style={{
+                  transform: `translateY(${rowVirtualizer.getTotalSize()}px)`,
+                }}
               >
                 <Table.Cell
                   display="flex"
@@ -257,7 +252,7 @@ export const InfiniteTable = React.forwardRef<
 
             {!isLoading && isEmpty && (
               <Table.Row display="flex" w="100%">
-                <Table.Cell>No data available</Table.Cell>
+                <Table.Cell w="100%">No data available</Table.Cell>
               </Table.Row>
             )}
           </Table.Body>

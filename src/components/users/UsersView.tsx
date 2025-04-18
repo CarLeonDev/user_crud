@@ -5,7 +5,7 @@ import { AUTH_TOKEN_KEY } from "@/constants";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { User, UsersApiResponse } from "@/types/users";
-import { getUsers } from "@/services/users";
+import { getUsers } from "@/services/usersService";
 import { useInfiniteQuery, keepPreviousData } from "@tanstack/react-query";
 import { InfiniteTable } from "@/components/InfiniteTable";
 import { ColumnDef, Row } from "@tanstack/react-table";
