@@ -57,12 +57,16 @@ export const useMeasure = <E extends Element = Element>(): UseMeasureResult<E> =
   // Create a ResizeObserver to track changes in the element's size and position
   const observer = useMemo(
     () =>
-      new (window as any).ResizeObserver((entries: ResizeObserverEntry[]) => {
-        if (entries[0]) {
-          const { x, y, width, height, top, left, bottom, right } = entries[0].contentRect;
-          setRect({ x, y, width, height, top, left, bottom, right });
-        }
-      }),
+      {
+        if (typeof window === 'undefined') return null;
+        
+        return new (window as any).ResizeObserver((entries: ResizeObserverEntry[]) => {
+          if (entries[0]) {
+            const { x, y, width, height, top, left, bottom, right } = entries[0].contentRect;
+            setRect({ x, y, width, height, top, left, bottom, right });
+          }
+        });
+      },
     []
   );
 
