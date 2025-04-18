@@ -1,7 +1,7 @@
 "use client";
 
 import { useLocalStorage } from "@/hooks/useLocalStorage";
-import { AUTH_TOKEN_KEY } from "@/constants";
+import { AUTH_TOKEN_KEY, PAGE_SIZE } from "@/constants";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { User, UsersApiResponse } from "@/types/users";
@@ -13,21 +13,10 @@ import {
 } from "@tanstack/react-query";
 import { InfiniteTable } from "@/components/InfiniteTable";
 import { ColumnDef, Row } from "@tanstack/react-table";
-import {
-  CloseButton,
-  Button,
-  Dialog,
-  Flex,
-  Heading,
-  Input,
-  InputGroup,
-  Portal,
-  Text,
-} from "@chakra-ui/react";
+import { Flex, Heading, Input, InputGroup } from "@chakra-ui/react";
 import { useDebounce } from "@/hooks/useDebounce";
 import { Search, Trash } from "lucide-react";
-
-const LIMIT = 10;
+import { DeleteUserDialog } from "./DeleteUserDialog";
 
 // Column definitions for the users table.
 const columns: ColumnDef<User, any>[] = [
@@ -84,7 +73,10 @@ export const UsersView = () => {
     queryKey: ["users"],
     queryFn: async (context) => {
       const pageParam = context.pageParam as number;
-      const fetchedData = await getUsers({ page: pageParam + 1, size: LIMIT });
+      const fetchedData = await getUsers({
+        page: pageParam + 1,
+        size: PAGE_SIZE,
+      });
 
       // Simulate a real API response
       // Filter out the users that have been deleted
@@ -101,9 +93,9 @@ export const UsersView = () => {
     },
     initialPageParam: 0,
     getNextPageParam: (lastPage: any, allPages) => {
-      // If the last page has `LIMIT items, there is a next page
+      // If the last page has `PAGE_SIZE items, there is a next page
       const nextPage: any =
-        lastPage?.length === LIMIT ? allPages.length + 1 : undefined;
+        lastPage?.length === PAGE_SIZE ? allPages.length + 1 : undefined;
       return nextPage;
     },
     refetchOnWindowFocus: false,
@@ -216,59 +208,5 @@ export const UsersView = () => {
         />
       </Flex>
     </>
-  );
-};
-
-type DeleteUserDialogProps = {
-  user?: User | null;
-  open?: boolean;
-  onOpenChange?: (open: boolean) => void;
-  onDelete?: () => void;
-};
-
-const DeleteUserDialog = ({
-  user,
-  open,
-  onOpenChange,
-  onDelete,
-}: DeleteUserDialogProps) => {
-  if (!user || !open) return null;
-
-  return (
-    <Dialog.Root
-      lazyMount
-      open={true}
-      closeOnInteractOutside={false}
-      onOpenChange={(e) => onOpenChange?.(e.open)}
-    >
-      <Portal>
-        <Dialog.Backdrop />
-        <Dialog.Positioner>
-          <Dialog.Content>
-            <Dialog.Header>
-              <Dialog.Title>Delete User</Dialog.Title>
-            </Dialog.Header>
-            <Dialog.Body>
-              <Text>
-                Are you sure you want to delete <b>{user?.name}</b>?
-              </Text>
-            </Dialog.Body>
-            <Dialog.Footer>
-              <Dialog.ActionTrigger asChild>
-                <Button variant="outline">Cancel</Button>
-              </Dialog.ActionTrigger>
-              <Dialog.ActionTrigger asChild>
-                <Button colorPalette="red" onClick={onDelete}>
-                  Delete
-                </Button>
-              </Dialog.ActionTrigger>
-            </Dialog.Footer>
-            <Dialog.CloseTrigger asChild>
-              <CloseButton size="sm" />
-            </Dialog.CloseTrigger>
-          </Dialog.Content>
-        </Dialog.Positioner>
-      </Portal>
-    </Dialog.Root>
   );
 };
