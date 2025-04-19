@@ -20,7 +20,12 @@ export const LogoutButton = () => {
   if (!token) return null;
 
   return (
-    <IconButton variant="ghost" onClick={handleLogout} aria-label="Logout">
+    <IconButton
+      variant="ghost"
+      aria-label="Logout"
+      data-testid="logout-button"
+      onClick={handleLogout}
+    >
       <LogOut />
     </IconButton>
   );
