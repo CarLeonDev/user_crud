@@ -5,8 +5,10 @@ A modern web application built with Next.js that provides a complete user manage
 ## Tech Stack
 
 - **Frontend Framework**: Next.js
-- **Styling**: Tailwind CSS
+- **Styling**: Emotion CSS
 - **UI Components**: Chakra UI
+- **Icons**: Lucide
+- **Infinite Table**: Tanstack React-Query, React-Table and React-Virtual
 - **Form Handling**: React Hook Form
 - **Validation**: Yup
 - **State Management**: Zustand
@@ -17,8 +19,15 @@ A modern web application built with Next.js that provides a complete user manage
 - User authentication and authorization
 - Create, read, and delete user profiles
 - Responsive design for all device sizes
+- Infinite table to list user
 - Form validation and error handling
 - Optimized performance with Next.js features
+
+## TO-DOs:
+
+- Implement real Auth API.
+- Implement real User API
+- Update user.
 
 ## Getting Started
 
