@@ -2,6 +2,8 @@
 import React, { useRef } from "react";
 import { Input, Button, Stack } from "@chakra-ui/react";
 import { TEST_IDS } from "@/constants";
+import { InputField } from "@/components/ui/InputField";
+import { MailIcon, LockIcon } from "lucide-react";
 
 type LoginFormProps = {
   onSubmit: (email: string, password: string) => void;
@@ -25,24 +27,36 @@ export const LoginForm = ({ onSubmit }: LoginFormProps) => {
 
   return (
     <form ref={formRef} onSubmit={handleSubmit}>
-      <Stack direction="column" gap={4}>
-        <Stack direction="column" gap={2}>
-          <Input
-            placeholder="Enter your email"
-            type="email"
+      <Stack direction="column" gap={6}>
+        <Stack direction="column" gap={4}>
+          <InputField
             name="email"
-            required
-            maxLength={255}
-            data-testid={TEST_IDS.EMAIL_INPUT}
+            label="Email"
+            inputGroupProps={{
+              startElement: <MailIcon size={16} />,
+            }}
+            inputProps={{
+              placeholder: "Enter your email",
+              type: "email",
+              name: "email",
+              required: true,
+              maxLength: 255,
+            }}
           />
 
-          <Input
-            placeholder="Enter your password"
-            type="password"
+          <InputField
             name="password"
-            required
-            maxLength={255}
-            data-testid={TEST_IDS.PASSWORD_INPUT}
+            label="Password"
+            inputProps={{
+              placeholder: "Enter your password",
+              type: "password",
+              name: "password",
+              required: true,
+              maxLength: 255,
+            }}
+            inputGroupProps={{
+              startElement: <LockIcon size={16} />,
+            }}
           />
         </Stack>
 

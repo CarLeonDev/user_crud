@@ -22,8 +22,6 @@ export const PAGE_SIZE = 10;
  */
 export const TEST_IDS = {
   LOGIN_VIEW: "login-view",
-  EMAIL_INPUT: "email-input",
-  PASSWORD_INPUT: "password-input",
   SUBMIT_BUTTON: "submit-button",
   LOGOUT_BUTTON: "logout-button",
   ADD_USER_BUTTON: "add-user-button",

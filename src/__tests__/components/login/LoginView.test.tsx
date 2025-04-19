@@ -5,6 +5,10 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
 import Provider from "@/app/provider";
 import { TEST_IDS } from "@/constants";
 
+const getInputField = (name: string) => {
+  return screen.getByTestId(`${TEST_IDS.INPUT_FIELD}-${name}`);
+};
+
 describe("LoginView", () => {
   const mockRouter = {
     push: jest.fn(),
@@ -33,8 +37,8 @@ describe("LoginView", () => {
 
     render(<LoginView />, { wrapper: Provider });
 
-    const emailInput = screen.getByTestId(TEST_IDS.EMAIL_INPUT);
-    const passwordInput = screen.getByTestId(TEST_IDS.PASSWORD_INPUT);
+    const emailInput = getInputField("email");
+    const passwordInput = getInputField("password");
     const submitButton = screen.getByTestId(TEST_IDS.SUBMIT_BUTTON);
 
     fireEvent.change(emailInput, { target: { value: "test@example.com" } });

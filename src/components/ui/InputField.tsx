@@ -8,14 +8,22 @@ import {
   InputGroupProps,
 } from "@chakra-ui/react";
 import { TEST_IDS } from "@/constants";
+import { RefAttributes } from "react";
+
 type InputFieldProps = {
   name: string;
   label?: string;
   required?: boolean;
   error?: string;
-  fieldRootProps?: Omit<FieldRootProps, "required" | "invalid" | "children">;
-  inputGroupProps?: Omit<InputGroupProps, "children">;
-  inputProps?: InputProps;
+  fieldRootProps?: Omit<
+    FieldRootProps & RefAttributes<HTMLDivElement>,
+    "required" | "invalid" | "children"
+  >;
+  inputGroupProps?: Omit<
+    InputGroupProps & RefAttributes<HTMLDivElement>,
+    "children"
+  >;
+  inputProps?: InputProps & RefAttributes<HTMLInputElement>;
 };
 
 export const InputField = ({
