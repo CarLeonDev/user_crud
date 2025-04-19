@@ -148,7 +148,7 @@ export const UsersView = () => {
     if (authToken) return;
 
     router.push("/login");
-  }, [authToken]);
+  }, [authToken, router]);
 
   if (!authToken || !isHydrated) {
     return (

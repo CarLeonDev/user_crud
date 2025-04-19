@@ -45,7 +45,7 @@ describe("LoginForm", () => {
   });
 
   it("does not call onSubmit when email is missing", async () => {
-    const { getByTestId } = render(<LoginForm onSubmit={mockOnSubmit} />, {
+    render(<LoginForm onSubmit={mockOnSubmit} />, {
       wrapper: Provider,
     });
 
@@ -59,7 +59,7 @@ describe("LoginForm", () => {
   });
 
   it("does not call onSubmit when password is missing", async () => {
-    const { getByTestId } = render(<LoginForm onSubmit={mockOnSubmit} />, {
+    render(<LoginForm onSubmit={mockOnSubmit} />, {
       wrapper: Provider,
     });
 
@@ -73,7 +73,7 @@ describe("LoginForm", () => {
   });
 
   it("validates email format", async () => {
-    const { getByTestId } = render(<LoginForm onSubmit={mockOnSubmit} />, {
+    render(<LoginForm onSubmit={mockOnSubmit} />, {
       wrapper: Provider,
     });
 

@@ -141,6 +141,7 @@ export const InfiniteTable = React.forwardRef<
     // a check on mount and after a fetch to see if the table is already scrolled to the bottom and immediately needs to fetch more data
     useEffect(() => {
       fetchMoreOnBottomReached(ref.current);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [fetchMoreOnBottomReached]);
 
     return (
@@ -347,6 +348,8 @@ export const InfiniteTable = React.forwardRef<
   }
 );
 
+InfiniteTable.displayName = "InfiniteTable";
+
 const TableRow = React.forwardRef<HTMLTableRowElement, Table.RowProps>(
   ({ children, ...props }, ref) => {
     return (
@@ -361,6 +364,7 @@ const TableRow = React.forwardRef<HTMLTableRowElement, Table.RowProps>(
   }
 );
 
+TableRow.displayName = "TableRow";
 type TableCellProps = React.TableHTMLAttributes<HTMLTableCellElement> &
   Table.CellProps & {
     isOdd?: boolean;
@@ -383,3 +387,5 @@ const TableCell = React.forwardRef<HTMLTableCellElement, TableCellProps>(
     );
   }
 );
+
+TableCell.displayName = "TableCell";

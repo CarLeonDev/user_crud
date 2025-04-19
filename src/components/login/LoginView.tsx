@@ -14,7 +14,8 @@ export const LoginView = () => {
   );
   const router = useRouter();
 
-  const handleSubmit = (email: string, password: string) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleSubmit = async (email: string, password: string) => {
     // TODO: Implement login logic
     // const response = await fetch("http://localhost:3000/api/login", {
     //   method: "POST",
@@ -31,7 +32,7 @@ export const LoginView = () => {
     if (authToken) {
       router.push("/users");
     }
-  }, [authToken]);
+  }, [authToken, router]);
 
   return (
     <Stack flex={1} justifyContent="center">

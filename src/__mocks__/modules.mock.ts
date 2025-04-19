@@ -18,8 +18,6 @@ jest.mock("@tanstack/react-virtual", () => ({
   useVirtualizer: ({
     count,
     estimateSize,
-    getScrollElement,
-    overscan,
   }: {
     count: number;
     estimateSize: () => number;
@@ -47,7 +45,7 @@ jest.mock("@/hooks/useHydration", () => ({
 }));
 
 jest.mock("@/hooks/useLocalStorage", () => ({
-  useLocalStorage: jest.fn((key: string, value: any) => [key, jest.fn()]),
+  useLocalStorage: jest.fn((key: string) => [key, jest.fn()]),
 }));
 
 jest.mock("@/hooks/useMeasure", () => ({

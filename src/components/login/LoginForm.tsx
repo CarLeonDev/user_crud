@@ -1,6 +1,6 @@
 "use client";
 import React, { useRef } from "react";
-import { Input, Button, Stack } from "@chakra-ui/react";
+import { Button, Stack } from "@chakra-ui/react";
 import { TEST_IDS } from "@/constants";
 import { InputField } from "@/components/ui/InputField";
 import { MailIcon, LockIcon } from "lucide-react";
