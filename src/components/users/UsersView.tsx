@@ -17,6 +17,8 @@ import { UserSchema } from "@/schemas/userSchema";
 import { useUsersStore } from "@/stores/useUsersStore";
 import { useUsersInfinite } from "@/hooks/useUsersInfinite";
 import { ErrorAlert } from "@/components/ErrorAlert";
+import { Loading } from "../ui/Loading";
+import { useHydration } from "@/hooks/useHydration";
 
 // Column definitions for the users table.
 const columns: ColumnDef<User, any>[] = [
@@ -47,6 +49,7 @@ const columns: ColumnDef<User, any>[] = [
 ];
 
 export const UsersView = () => {
+  const isHydrated = useHydration();
   // Authentication state management
   const [authToken] = useLocalStorage<string | null>(AUTH_TOKEN_KEY, null);
   const router = useRouter();
@@ -146,6 +149,14 @@ export const UsersView = () => {
 
     router.push("/login");
   }, [authToken]);
+
+  if (!authToken || !isHydrated) {
+    return (
+      <Flex flex={1} justifyContent="center" alignItems="center">
+        <Loading />
+      </Flex>
+    );
+  }
 
   return (
     <>
