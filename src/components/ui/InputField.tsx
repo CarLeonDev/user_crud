@@ -5,42 +5,42 @@ import {
   InputGroup,
   Stack,
   Field,
+  InputGroupProps,
 } from "@chakra-ui/react";
-
+import { TEST_IDS } from "@/constants";
 type InputFieldProps = {
-  name?: string;
-  label: string;
+  name: string;
+  label?: string;
+  required?: boolean;
   error?: string;
-  startElement?: React.ReactNode;
-  endElement?: React.ReactNode;
-} & FieldRootProps &
-  InputProps;
+  fieldRootProps?: Omit<FieldRootProps, "required" | "invalid" | "children">;
+  inputGroupProps?: Omit<InputGroupProps, "children">;
+  inputProps?: InputProps;
+};
 
 export const InputField = ({
   name,
   label,
   required,
   error,
-  startElement,
-  endElement,
-  orientation,
-  ...props
+  fieldRootProps,
+  inputGroupProps,
+  inputProps,
 }: InputFieldProps) => {
   return (
-    <Field.Root
-      required={required}
-      invalid={!!error}
-      orientation={orientation}
-      {...props}
-    >
+    <Field.Root required={required} invalid={!!error} {...fieldRootProps}>
       <Field.Label>
         {label}
         {required && <Field.RequiredIndicator />}
       </Field.Label>
 
       <Stack direction="column" gap={1} w="full">
-        <InputGroup startElement={startElement} endElement={endElement}>
-          <Input name={name} {...props} />
+        <InputGroup {...inputGroupProps}>
+          <Input
+            name={name}
+            {...inputProps}
+            data-testid={`${TEST_IDS.INPUT_FIELD}-${name}`}
+          />
         </InputGroup>
 
         <Field.ErrorText>{error}</Field.ErrorText>

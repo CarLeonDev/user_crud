@@ -46,7 +46,12 @@ export const AddUserDialog = ({
   });
 
   const handleSubmitForm = (data: UserSchema) => {
-    onSubmit(data);
+    onSubmit({
+      ...data,
+      address: {
+        ...data.address,
+      },
+    });
     reset();
   };
 
@@ -74,61 +79,96 @@ export const AddUserDialog = ({
                     <Flex direction="column" gap={4}>
                       <Stack direction="column" gap={2}>
                         <InputField
+                          name="name"
                           label="Name"
                           required
                           error={errors.name?.message}
-                          startElement={<UserIcon size={16} />}
-                          orientation={{
-                            base: "vertical",
-                            md: "horizontal",
+                          fieldRootProps={{
+                            orientation: {
+                              base: "vertical",
+                              md: "horizontal",
+                            },
                           }}
-                          {...register("name")}
+                          inputGroupProps={{
+                            startElement: <UserIcon size={16} />,
+                          }}
+                          inputProps={{
+                            ...register("name"),
+                          }}
                         />
 
                         <InputField
+                          name="username"
                           label="Username"
                           required
                           error={errors.username?.message}
-                          startElement={<AtSign size={16} />}
-                          orientation={{
-                            base: "vertical",
-                            md: "horizontal",
+                          fieldRootProps={{
+                            orientation: {
+                              base: "vertical",
+                              md: "horizontal",
+                            },
                           }}
-                          {...register("username")}
+                          inputGroupProps={{
+                            startElement: <AtSign size={16} />,
+                          }}
+                          inputProps={{
+                            ...register("username"),
+                          }}
                         />
 
                         <InputField
+                          name="email"
                           label="Email"
                           required
                           error={errors.email?.message}
-                          startElement={<MailIcon size={16} />}
-                          orientation={{
-                            base: "vertical",
-                            md: "horizontal",
+                          fieldRootProps={{
+                            orientation: {
+                              base: "vertical",
+                              md: "horizontal",
+                            },
                           }}
-                          {...register("email")}
+                          inputGroupProps={{
+                            startElement: <MailIcon size={16} />,
+                          }}
+                          inputProps={{
+                            ...register("email"),
+                          }}
                         />
 
                         <InputField
+                          name="phone"
                           label="Phone"
                           error={errors.phone?.message}
-                          startElement={<PhoneIcon size={16} />}
-                          orientation={{
-                            base: "vertical",
-                            md: "horizontal",
+                          fieldRootProps={{
+                            orientation: {
+                              base: "vertical",
+                              md: "horizontal",
+                            },
                           }}
-                          {...register("phone")}
+                          inputGroupProps={{
+                            startElement: <PhoneIcon size={16} />,
+                          }}
+                          inputProps={{
+                            ...register("phone"),
+                          }}
                         />
 
                         <InputField
+                          name="website"
                           label="Website"
                           error={errors.website?.message}
-                          startElement={<GlobeIcon size={16} />}
-                          orientation={{
-                            base: "vertical",
-                            md: "horizontal",
+                          fieldRootProps={{
+                            orientation: {
+                              base: "vertical",
+                              md: "horizontal",
+                            },
                           }}
-                          {...register("website")}
+                          inputGroupProps={{
+                            startElement: <GlobeIcon size={16} />,
+                          }}
+                          inputProps={{
+                            ...register("website"),
+                          }}
                         />
                       </Stack>
 
@@ -148,35 +188,52 @@ export const AddUserDialog = ({
                           gap={2}
                         >
                           <InputField
+                            name="address.street"
                             label="Street"
                             required
-                            gridColumn={{
-                              base: "span 1",
-                              md: "span 2",
-                            }}
                             error={errors.address?.street?.message}
-                            {...register("address.street")}
+                            fieldRootProps={{
+                              gridColumn: {
+                                base: "span 1",
+                                md: "span 2",
+                              },
+                            }}
+                            inputGroupProps={{
+                              startElement: <MapPinIcon size={16} />,
+                            }}
+                            inputProps={{
+                              ...register("address.street"),
+                            }}
                           />
 
                           <InputField
+                            name="address.suite"
                             label="Suite"
                             required
                             error={errors.address?.suite?.message}
-                            {...register("address.suite")}
+                            inputProps={{
+                              ...register("address.suite"),
+                            }}
                           />
 
                           <InputField
+                            name="address.city"
                             label="City"
                             required
                             error={errors.address?.city?.message}
-                            {...register("address.city")}
+                            inputProps={{
+                              ...register("address.city"),
+                            }}
                           />
 
                           <InputField
+                            name="address.zipcode"
                             label="Zipcode"
                             required
                             error={errors.address?.zipcode?.message}
-                            {...register("address.zipcode")}
+                            inputProps={{
+                              ...register("address.zipcode"),
+                            }}
                           />
                         </Grid>
                       </Stack>
@@ -188,10 +245,20 @@ export const AddUserDialog = ({
 
             <Dialog.Footer>
               <Dialog.ActionTrigger asChild>
-                <Button variant="outline">Cancel</Button>
+                <Button
+                  variant="outline"
+                  data-testid={TEST_IDS.ADD_USER_DIALOG_CANCEL_BUTTON}
+                >
+                  Cancel
+                </Button>
               </Dialog.ActionTrigger>
 
-              <Button type="submit" form="add-user-form" colorPalette="green">
+              <Button
+                type="submit"
+                form="add-user-form"
+                colorPalette="green"
+                data-testid={TEST_IDS.ADD_USER_DIALOG_CREATE_BUTTON}
+              >
                 Create
               </Button>
             </Dialog.Footer>

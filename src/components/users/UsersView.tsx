@@ -126,18 +126,9 @@ export const UsersView = () => {
     setShowAddDialog(true);
   };
 
-  const handleAddUserSubmit = async (data: UserSchema) => {
+  const handleAddUserSubmit = async (user: UserSchema) => {
     // Add the user to the usersAdded array
-    setUsersAdded([
-      ...usersAdded,
-      {
-        ...data,
-        address: {
-          ...data.address,
-        },
-        id: crypto.randomUUID(),
-      },
-    ]);
+    setUsersAdded([...usersAdded, { ...user, id: crypto.randomUUID() }]);
     // Invalidate the users query
     await queryClient.invalidateQueries({
       queryKey: ["users"],
@@ -209,7 +200,9 @@ export const UsersView = () => {
             {
               label: "Add User",
               colorPalette: "green",
-              icon: <UserPlus size={16} data-testid={TEST_IDS.ADD_USER_BUTTON} />,
+              icon: (
+                <UserPlus size={16} data-testid={TEST_IDS.ADD_USER_BUTTON} />
+              ),
               onClick: handleAddUser,
             },
           ]}

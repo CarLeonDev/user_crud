@@ -1,11 +1,14 @@
 import { mockUsers } from "./users.mock";
 
 jest.mock("next/navigation", () => ({
+  ...jest.requireActual("next/navigation"),
+  useParams: jest.fn(),
   useRouter: jest.fn(),
 }));
 
 jest.mock("@tanstack/react-query", () => ({
   ...jest.requireActual("@tanstack/react-query"),
+  useQuery: jest.fn(),
   useQueryClient: jest.fn(),
 }));
 

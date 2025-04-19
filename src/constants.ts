@@ -28,6 +28,8 @@ export const TEST_IDS = {
   LOGOUT_BUTTON: "logout-button",
   ADD_USER_BUTTON: "add-user-button",
   ADD_USER_DIALOG: "add-user-dialog",
+  ADD_USER_DIALOG_CANCEL_BUTTON: "add-user-cancel-button",
+  ADD_USER_DIALOG_CREATE_BUTTON: "add-user-create-button",
   DELETE_USER_BUTTON: "delete-user-button",
   DELETE_USER_DIALOG: "delete-user-dialog",
   DELETE_USER_DIALOG_CANCEL_BUTTON: "delete-user-cancel-button",
@@ -40,4 +42,9 @@ export const TEST_IDS = {
   INFINITE_TABLE_LOADING_ROW: "infinite-table-loading-row",
   INFINITE_TABLE_EMPTY_ROW: "infinite-table-empty-row",
   ERROR_ALERT: "error-alert",
+  INPUT_FIELD: "input-field",
+  LOADING_SPINNER: "loading-spinner",
+  EMPTY_STATE_CONTENT: "empty-state-content",
+  USER_NAME: "user-name",
+  USER_USERNAME: "user-username",
 };

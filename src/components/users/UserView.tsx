@@ -15,8 +15,6 @@ import {
   Flex,
   Fieldset,
   Text,
-  Blockquote,
-  Alert,
 } from "@chakra-ui/react";
 import {
   MailIcon,
@@ -29,6 +27,8 @@ import {
 import { InputField } from "@/components/ui/InputField";
 import { useUsersStore } from "@/stores/useUsersStore";
 import { ErrorAlert } from "@/components/ErrorAlert";
+import { TEST_IDS } from "@/constants";
+
 export const UserView = () => {
   const { id } = useParams();
   const router = useRouter();
@@ -41,14 +41,14 @@ export const UserView = () => {
 
   const userData = !data?.id ? usersAdded.find((user) => user.id === id) : data;
 
-  if (isLoading) return <Loading />;
+  if (isLoading) return <Loading data-testid={TEST_IDS.LOADING_SPINNER} />;
 
   if (error) return <ErrorAlert error={error} title="Unable to Load User" />;
 
   if (!userData?.id) {
     return (
       <EmptyState.Root>
-        <EmptyState.Content>
+        <EmptyState.Content data-testid={TEST_IDS.EMPTY_STATE_CONTENT}>
           <EmptyState.Indicator>
             <UserXIcon size={24} />
           </EmptyState.Indicator>
@@ -82,8 +82,8 @@ export const UserView = () => {
             </Avatar.Root>
 
             <Stack direction="column" gap={0}>
-              <Heading>{userData?.name}</Heading>
-              <Text fontSize="sm" color="fg.muted">
+              <Heading data-testid={TEST_IDS.USER_NAME}>{userData?.name}</Heading>
+              <Text fontSize="sm" color="fg.muted" data-testid={TEST_IDS.USER_USERNAME}>
                 @{userData?.username}
               </Text>
             </Stack>
@@ -96,32 +96,53 @@ export const UserView = () => {
               <Flex direction="column" gap={4}>
                 <Stack direction="column" gap={2}>
                   <InputField
+                    name="email"
                     label="Email"
-                    value={userData?.email}
-                    startElement={<MailIcon size={16} />}
-                    orientation={{
-                      base: "vertical",
-                      md: "horizontal",
+                    fieldRootProps={{
+                      orientation: {
+                        base: "vertical",
+                        md: "horizontal",
+                      },
+                    }}
+                    inputProps={{
+                      value: userData?.email,
+                    }}
+                    inputGroupProps={{
+                      startElement: <MailIcon size={16} />,
                     }}
                   />
 
                   <InputField
+                    name="phone"
                     label="Phone"
-                    value={userData?.phone}
-                    startElement={<PhoneIcon size={16} />}
-                    orientation={{
-                      base: "vertical",
-                      md: "horizontal",
+                    fieldRootProps={{
+                      orientation: {
+                        base: "vertical",
+                        md: "horizontal",
+                      },
+                    }}
+                    inputProps={{
+                      value: userData?.phone,
+                    }}
+                    inputGroupProps={{
+                      startElement: <PhoneIcon size={16} />,
                     }}
                   />
 
                   <InputField
+                    name="website"
                     label="Website"
-                    value={userData?.website}
-                    startElement={<GlobeIcon size={16} />}
-                    orientation={{
-                      base: "vertical",
-                      md: "horizontal",
+                    fieldRootProps={{
+                      orientation: {
+                        base: "vertical",
+                        md: "horizontal",
+                      },
+                    }}
+                    inputProps={{
+                      value: userData?.website,
+                    }}
+                    inputGroupProps={{
+                      startElement: <GlobeIcon size={16} />,
                     }}
                   />
                 </Stack>
@@ -142,24 +163,44 @@ export const UserView = () => {
                     gap={2}
                   >
                     <InputField
-                      gridColumn={{
-                        md: "span 2",
-                        base: "span 1",
-                      }}
+                      name="address.street"
                       label="Street"
-                      value={userData?.address?.street}
+                      fieldRootProps={{
+                        gridColumn: {
+                          md: "span 2",
+                          base: "span 1",
+                        },
+                      }}
+                      inputProps={{
+                        value: userData?.address?.street,
+                      }}
+                      inputGroupProps={{
+                        startElement: <MapPinIcon size={16} />,
+                      }}
                     />
 
                     <InputField
+                      name="address.suite"
                       label="Suite"
-                      value={userData?.address?.suite}
+                      inputProps={{
+                        value: userData?.address?.suite,
+                      }}
                     />
 
-                    <InputField label="City" value={userData?.address?.city} />
+                    <InputField
+                      name="address.city"
+                      label="City"
+                      inputProps={{
+                        value: userData?.address?.city,
+                      }}
+                    />
 
                     <InputField
+                      name="address.zipcode"
                       label="ZipCode"
-                      value={userData?.address?.zipcode}
+                      inputProps={{
+                        value: userData?.address?.zipcode,
+                      }}
                     />
                   </Grid>
                 </Stack>
