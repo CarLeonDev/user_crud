@@ -22,6 +22,8 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { userSchema, UserSchema } from "@/schemas/userSchema";
 import { InputField } from "@/components/ui/InputField";
+import { TEST_IDS } from "@/constants";
+
 interface AddUserDialogProps {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
@@ -58,7 +60,7 @@ export const AddUserDialog = ({
       <Portal>
         <Dialog.Backdrop />
         <Dialog.Positioner>
-          <Dialog.Content>
+          <Dialog.Content data-testid={TEST_IDS.ADD_USER_DIALOG}>
             <Dialog.Header>
               <Dialog.Title>Create new user</Dialog.Title>
             </Dialog.Header>

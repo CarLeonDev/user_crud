@@ -57,7 +57,7 @@ jest.mock("@/hooks/useUsersInfinite", () => ({
       pages: [
         {
           data: mockUsers,
-          total: 1,
+          total: mockUsers.length,
         },
       ],
     },

@@ -1,4 +1,5 @@
 import { Alert, Blockquote } from "@chakra-ui/react";
+import { TEST_IDS } from "@/constants";
 
 type ErrorAlertProps = {
   error: Error | null;
@@ -10,7 +11,12 @@ export const ErrorAlert = ({ error, title, description }: ErrorAlertProps) => {
   if (!error) return null;
 
   return (
-    <Alert.Root status="error" variant="subtle" mb={4}>
+    <Alert.Root
+      status="error"
+      variant="subtle"
+      mb={4}
+      data-testid={TEST_IDS.ERROR_ALERT}
+    >
       <Alert.Indicator />
       <Alert.Content>
         <Alert.Title>{title}</Alert.Title>

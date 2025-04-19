@@ -2,18 +2,11 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Code, Search, Trash, UserPlus } from "lucide-react";
-import {
-  Alert,
-  Blockquote,
-  Flex,
-  Heading,
-  Input,
-  InputGroup,
-} from "@chakra-ui/react";
+import { Search, Trash, UserPlus } from "lucide-react";
+import { Flex, Heading, Input, InputGroup } from "@chakra-ui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { ColumnDef, Row } from "@tanstack/react-table";
-import { AUTH_TOKEN_KEY } from "@/constants";
+import { AUTH_TOKEN_KEY, TEST_IDS } from "@/constants";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { User } from "@/types/users";
@@ -101,8 +94,8 @@ export const UsersView = () => {
     ? filteredData.length
     : data?.pages[0].total ?? 0;
 
-  const handleRowClick = (row: Row<User>) => {
-    router.push(`/users/${row.original.id}`);
+  const handleRowClick = (user: User) => {
+    router.push(`/users/${user.id}`);
   };
 
   const handleDeleteRow = async (row: Row<User>) => {
@@ -197,6 +190,7 @@ export const UsersView = () => {
 
           <InputGroup flex={1} maxW="250px" startElement={<Search size={16} />}>
             <Input
+              data-testid={TEST_IDS.SEARCH_INPUT}
               placeholder="Search"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -215,7 +209,7 @@ export const UsersView = () => {
             {
               label: "Add User",
               colorPalette: "green",
-              icon: <UserPlus size={16} />,
+              icon: <UserPlus size={16} data-testid={TEST_IDS.ADD_USER_BUTTON} />,
               onClick: handleAddUser,
             },
           ]}
@@ -223,7 +217,9 @@ export const UsersView = () => {
             {
               label: "Delete",
               colorPalette: "red",
-              icon: <Trash size={16} />,
+              icon: (
+                <Trash size={16} data-testid={TEST_IDS.DELETE_USER_BUTTON} />
+              ),
               onClick: handleDeleteRow,
             },
           ]}
