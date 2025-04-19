@@ -15,6 +15,8 @@ import {
   Flex,
   Fieldset,
   Text,
+  Blockquote,
+  Alert,
 } from "@chakra-ui/react";
 import {
   MailIcon,
@@ -26,11 +28,11 @@ import {
 } from "lucide-react";
 import { InputField } from "@/components/ui/InputField";
 import { useUsersStore } from "@/stores/useUsersStore";
-
+import { ErrorAlert } from "@/components/ErrorAlert";
 export const UserView = () => {
   const { id } = useParams();
   const router = useRouter();
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["user", id],
     queryFn: () => getUser(id as string),
   });
@@ -40,6 +42,8 @@ export const UserView = () => {
   const userData = !data?.id ? usersAdded.find((user) => user.id === id) : data;
 
   if (isLoading) return <Loading />;
+
+  if (error) return <ErrorAlert error={error} title="Unable to Load User" />;
 
   if (!userData?.id) {
     return (

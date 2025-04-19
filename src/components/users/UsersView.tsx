@@ -2,8 +2,15 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Search, Trash, UserPlus } from "lucide-react";
-import { Flex, Heading, Input, InputGroup } from "@chakra-ui/react";
+import { Code, Search, Trash, UserPlus } from "lucide-react";
+import {
+  Alert,
+  Blockquote,
+  Flex,
+  Heading,
+  Input,
+  InputGroup,
+} from "@chakra-ui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { ColumnDef, Row } from "@tanstack/react-table";
 import { AUTH_TOKEN_KEY } from "@/constants";
@@ -16,6 +23,7 @@ import { AddUserDialog } from "@/components/users/AddUserDialog";
 import { UserSchema } from "@/schemas/userSchema";
 import { useUsersStore } from "@/stores/useUsersStore";
 import { useUsersInfinite } from "@/hooks/useUsersInfinite";
+import { ErrorAlert } from "@/components/ErrorAlert";
 
 // Column definitions for the users table.
 const columns: ColumnDef<User, any>[] = [
@@ -66,6 +74,7 @@ export const UsersView = () => {
   const {
     data,
     refetch,
+    error,
     fetchNextPage,
     isFetching,
     isFetchingNextPage,
@@ -125,7 +134,7 @@ export const UsersView = () => {
   };
 
   const handleAddUserSubmit = async (data: UserSchema) => {
-      // Add the user to the usersAdded array
+    // Add the user to the usersAdded array
     setUsersAdded([
       ...usersAdded,
       {
@@ -156,6 +165,8 @@ export const UsersView = () => {
 
   return (
     <>
+      <ErrorAlert error={error} title="Unable to Load Users" />
+
       <DeleteUserDialog
         open={showDeleteDialog}
         user={selectedUser}
