@@ -125,11 +125,14 @@ export const UsersView = () => {
   };
 
   const handleAddUserSubmit = async (data: UserSchema) => {
-    // Add the user to the usersAdded array
+      // Add the user to the usersAdded array
     setUsersAdded([
       ...usersAdded,
       {
         ...data,
+        address: {
+          ...data.address,
+        },
         id: crypto.randomUUID(),
       },
     ]);

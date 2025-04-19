@@ -6,17 +6,15 @@ import { Loading } from "../ui/Loading";
 import {
   Avatar,
   Card,
-  Field,
   Grid,
   Heading,
-  Input,
   Stack,
-  Text,
   Separator,
   Button,
   EmptyState,
   Flex,
   Fieldset,
+  Text,
 } from "@chakra-ui/react";
 import {
   MailIcon,
@@ -27,6 +25,8 @@ import {
   ArrowLeftIcon,
 } from "lucide-react";
 import { InputField } from "@/components/ui/InputField";
+import { useUsersStore } from "@/stores/useUsersStore";
+
 export const UserView = () => {
   const { id } = useParams();
   const router = useRouter();
@@ -35,9 +35,13 @@ export const UserView = () => {
     queryFn: () => getUser(id as string),
   });
 
+  const { usersAdded } = useUsersStore();
+
+  const userData = !data?.id ? usersAdded.find((user) => user.id === id) : data;
+
   if (isLoading) return <Loading />;
 
-  if (!data?.id) {
+  if (!userData?.id) {
     return (
       <EmptyState.Root>
         <EmptyState.Content>
@@ -70,13 +74,13 @@ export const UserView = () => {
         <Card.Header>
           <Stack direction="row" gap={2} alignItems="center">
             <Avatar.Root variant="solid">
-              <Avatar.Fallback name={data?.name} />
+              <Avatar.Fallback name={userData?.name} />
             </Avatar.Root>
 
             <Stack direction="column" gap={0}>
-              <Heading>{data?.name}</Heading>
+              <Heading>{userData?.name}</Heading>
               <Text fontSize="sm" color="fg.muted">
-                @{data?.username}
+                @{userData?.username}
               </Text>
             </Stack>
           </Stack>
@@ -89,7 +93,7 @@ export const UserView = () => {
                 <Stack direction="column" gap={2}>
                   <InputField
                     label="Email"
-                    value={data?.email}
+                    value={userData?.email}
                     startElement={<MailIcon size={16} />}
                     orientation={{
                       base: "vertical",
@@ -99,7 +103,7 @@ export const UserView = () => {
 
                   <InputField
                     label="Phone"
-                    value={data?.phone}
+                    value={userData?.phone}
                     startElement={<PhoneIcon size={16} />}
                     orientation={{
                       base: "vertical",
@@ -109,7 +113,7 @@ export const UserView = () => {
 
                   <InputField
                     label="Website"
-                    value={data?.website}
+                    value={userData?.website}
                     startElement={<GlobeIcon size={16} />}
                     orientation={{
                       base: "vertical",
@@ -139,16 +143,19 @@ export const UserView = () => {
                         base: "span 1",
                       }}
                       label="Street"
-                      value={data?.address?.street}
+                      value={userData?.address?.street}
                     />
 
-                    <InputField label="Suite" value={data?.address?.suite} />
+                    <InputField
+                      label="Suite"
+                      value={userData?.address?.suite}
+                    />
 
-                    <InputField label="City" value={data?.address?.city} />
+                    <InputField label="City" value={userData?.address?.city} />
 
                     <InputField
                       label="ZipCode"
-                      value={data?.address?.zipcode}
+                      value={userData?.address?.zipcode}
                     />
                   </Grid>
                 </Stack>
