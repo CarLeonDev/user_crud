@@ -27,6 +27,10 @@ type Action = {
   onClick: (row: Row<any>) => void;
 };
 
+type HeaderAction = Action & {
+  onClick: () => void;
+};
+
 /**
  * Props for the InfiniteTable component.
  * Extends standard HTML table attributes with additional props for infinite scrolling functionality.
@@ -44,6 +48,8 @@ type InfiniteTableProps = React.TableHTMLAttributes<HTMLTableElement> & {
   totalRows: number;
   /** Whether the table should take up the full height of its container */
   fullHeight?: boolean;
+  /** Actions to display in the header */
+  headerActions?: HeaderAction[];
   /** Actions to display in the last column */
   actions?: Action[];
   /** Callback function when a row is clicked */
@@ -79,6 +85,7 @@ export const InfiniteTable = React.forwardRef<
       fullHeight = false,
       onRowClick,
       actions,
+      headerActions,
     },
     externalRef
   ) => {
@@ -188,9 +195,29 @@ export const InfiniteTable = React.forwardRef<
                   flex={1}
                   bg="bg.subtle"
                   boxSizing="content-box"
-                  w={`${(actions?.length ?? 0) * ACTION_BUTTON_WIDTH}px`}
+                  w="100%"
                   px={actions?.length ? 2 : 0}
-                />
+                  py={0}
+                  justifyContent="flex-end"
+                  minW={`${(actions?.length ?? 0) * ACTION_BUTTON_WIDTH}px`}
+                >
+                  {headerActions?.map((action) => (
+                    <IconButton
+                      key={action.label}
+                      variant="ghost"
+                      size="sm"
+                      colorPalette={action.colorPalette}
+                      aria-label={action.label}
+                      title={action.label}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        action.onClick();
+                      }}
+                    >
+                      {action.icon}
+                    </IconButton>
+                  ))}
+                </Table.ColumnHeader>
               </Table.Row>
             ))}
           </Table.Header>
@@ -253,10 +280,10 @@ export const InfiniteTable = React.forwardRef<
                     display="flex"
                     flex={1}
                     w="100%"
+                    px={actions?.length ? 2 : 0}
                     py={0}
                     justifyContent="flex-end"
                     isOdd={virtualRow.index % 2 === 0}
-                    px={actions?.length ? 2 : 0}
                   >
                     {actions?.map((action) => (
                       <IconButton

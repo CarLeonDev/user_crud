@@ -1,22 +1,21 @@
 "use client";
 
-import { useLocalStorage } from "@/hooks/useLocalStorage";
-import { AUTH_TOKEN_KEY, PAGE_SIZE } from "@/constants";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { User, UsersApiResponse } from "@/types/users";
-import { getUsers } from "@/services/usersService";
-import {
-  useInfiniteQuery,
-  keepPreviousData,
-  useQueryClient,
-} from "@tanstack/react-query";
-import { InfiniteTable } from "@/components/InfiniteTable";
-import { ColumnDef, Row } from "@tanstack/react-table";
+import { Search, Trash, UserPlus } from "lucide-react";
 import { Flex, Heading, Input, InputGroup } from "@chakra-ui/react";
+import { useQueryClient } from "@tanstack/react-query";
+import { ColumnDef, Row } from "@tanstack/react-table";
+import { AUTH_TOKEN_KEY } from "@/constants";
 import { useDebounce } from "@/hooks/useDebounce";
-import { Search, Trash } from "lucide-react";
-import { DeleteUserDialog } from "./DeleteUserDialog";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { User } from "@/types/users";
+import { InfiniteTable } from "@/components/InfiniteTable";
+import { DeleteUserDialog } from "@/components/users/DeleteUserDialog";
+import { AddUserDialog } from "@/components/users/AddUserDialog";
+import { UserSchema } from "@/schemas/userSchema";
+import { useUsersStore } from "@/stores/useUsersStore";
+import { useUsersInfinite } from "@/hooks/useUsersInfinite";
 
 // Column definitions for the users table.
 const columns: ColumnDef<User, any>[] = [
@@ -56,10 +55,12 @@ export const UsersView = () => {
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 500);
 
-  const usersDeleted = useRef<string[]>([]);
+  const { usersAdded, usersDeleted, setUsersAdded, setUsersDeleted } =
+    useUsersStore();
 
-  const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
+  const [showAddDialog, setShowAddDialog] = useState<boolean>(false);
 
   // Infinite query for fetching users data
   const {
@@ -69,38 +70,7 @@ export const UsersView = () => {
     isFetching,
     isFetchingNextPage,
     isLoading,
-  } = useInfiniteQuery<UsersApiResponse>({
-    queryKey: ["users"],
-    queryFn: async (context) => {
-      const pageParam = context.pageParam as number;
-      const fetchedData = await getUsers({
-        page: pageParam + 1,
-        size: PAGE_SIZE,
-      });
-
-      // Simulate a real API response
-      // Filter out the users that have been deleted
-      const data = fetchedData.data.filter(
-        ({ id }) => !usersDeleted.current.includes(id)
-      );
-      const total = fetchedData.total - usersDeleted.current.length;
-
-      return {
-        ...fetchedData,
-        data,
-        total,
-      };
-    },
-    initialPageParam: 0,
-    getNextPageParam: (lastPage: any, allPages) => {
-      // If the last page has `PAGE_SIZE items, there is a next page
-      const nextPage: any =
-        lastPage?.length === PAGE_SIZE ? allPages.length + 1 : undefined;
-      return nextPage;
-    },
-    refetchOnWindowFocus: false,
-    placeholderData: keepPreviousData,
-  });
+  } = useUsersInfinite();
 
   // Flatten the paginated data into a single array
   const flatData = useMemo(
@@ -137,7 +107,7 @@ export const UsersView = () => {
   const handleDeleteUser = async () => {
     if (!selectedUser) return;
     // Delete the user from the usersDeleted array
-    usersDeleted.current = [...usersDeleted.current, selectedUser.id];
+    setUsersDeleted([...usersDeleted, selectedUser.id]);
     // Invalidate the users query
     await queryClient.invalidateQueries({
       queryKey: ["users"],
@@ -148,6 +118,31 @@ export const UsersView = () => {
     refetch();
     // Close the delete dialog
     setShowDeleteDialog(false);
+  };
+
+  const handleAddUser = () => {
+    setShowAddDialog(true);
+  };
+
+  const handleAddUserSubmit = async (data: UserSchema) => {
+    // Add the user to the usersAdded array
+    setUsersAdded([
+      ...usersAdded,
+      {
+        ...data,
+        id: crypto.randomUUID(),
+      },
+    ]);
+    // Invalidate the users query
+    await queryClient.invalidateQueries({
+      queryKey: ["users"],
+      exact: false,
+      type: "all",
+    });
+    // Refetch the users query
+    refetch();
+    // Close the add dialog
+    setShowAddDialog(false);
   };
 
   useEffect(() => {
@@ -163,6 +158,12 @@ export const UsersView = () => {
         user={selectedUser}
         onOpenChange={setShowDeleteDialog}
         onDelete={handleDeleteUser}
+      />
+
+      <AddUserDialog
+        open={showAddDialog}
+        onOpenChange={setShowAddDialog}
+        onSubmit={handleAddUserSubmit}
       />
 
       <Flex
@@ -196,6 +197,14 @@ export const UsersView = () => {
           fetchNextPage={fetchNextPage}
           isLoading={isLoading || isFetching || isFetchingNextPage}
           totalRows={totalRows}
+          headerActions={[
+            {
+              label: "Add User",
+              colorPalette: "green",
+              icon: <UserPlus size={16} />,
+              onClick: handleAddUser,
+            },
+          ]}
           actions={[
             {
               label: "Delete",

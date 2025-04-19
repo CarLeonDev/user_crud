@@ -3,7 +3,7 @@ export interface Address {
   suite: string
   city: string
   zipcode: string
-  geo: Geo
+  geo?: Geo
 }
 
 export interface Geo {
