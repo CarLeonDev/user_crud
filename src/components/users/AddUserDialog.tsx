@@ -4,16 +4,11 @@ import {
   CloseButton,
   Portal,
   Stack,
-  Input,
   Grid,
-  Field,
   Heading,
   Separator,
   Flex,
   Fieldset,
-  InputGroup,
-  InputProps,
-  FieldRootProps,
 } from "@chakra-ui/react";
 import {
   AtSign,
@@ -26,7 +21,7 @@ import {
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { userSchema, UserSchema } from "@/schemas/userSchema";
-
+import { InputField } from "@/components/ui/InputField";
 interface AddUserDialogProps {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
@@ -206,47 +201,5 @@ export const AddUserDialog = ({
         </Dialog.Positioner>
       </Portal>
     </Dialog.Root>
-  );
-};
-
-type InputFieldProps = {
-  name: string;
-  label: string;
-  error?: string;
-  startElement?: React.ReactNode;
-  endElement?: React.ReactNode;
-} & FieldRootProps &
-  InputProps;
-
-const InputField = ({
-  name,
-  label,
-  required,
-  error,
-  startElement,
-  endElement,
-  orientation,
-  ...props
-}: InputFieldProps) => {
-  return (
-    <Field.Root
-      required={required}
-      invalid={!!error}
-      orientation={orientation}
-      {...props}
-    >
-      <Field.Label>
-        {label}
-        {required && <Field.RequiredIndicator />}
-      </Field.Label>
-
-      <Stack direction="column" gap={1} w="full">
-        <InputGroup startElement={startElement} endElement={endElement}>
-          <Input name={name} {...props} />
-        </InputGroup>
-
-        <Field.ErrorText>{error}</Field.ErrorText>
-      </Stack>
-    </Field.Root>
   );
 };

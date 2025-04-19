@@ -15,6 +15,8 @@ import {
   Separator,
   Button,
   EmptyState,
+  Flex,
+  Fieldset,
 } from "@chakra-ui/react";
 import {
   MailIcon,
@@ -24,7 +26,7 @@ import {
   UserXIcon,
   ArrowLeftIcon,
 } from "lucide-react";
-
+import { InputField } from "@/components/ui/InputField";
 export const UserView = () => {
   const { id } = useParams();
   const router = useRouter();
@@ -81,102 +83,78 @@ export const UserView = () => {
         </Card.Header>
 
         <Card.Body>
-          <Grid
-            w="full"
-            templateRows={{
-              base: "repeat(auto-fit, minmax(0, 1fr))",
-              md: "repeat(2, 1fr)",
-            }}
-            gap={4}
-            alignItems="center"
-          >
-            <Stack direction="column" gap={2}>
-              <Field.Root
-                orientation={{
-                  base: "vertical",
-                  md: "horizontal",
-                }}
-              >
-                <Field.Label gap={2}>
-                  <MailIcon size={16} /> Email:
-                </Field.Label>
+          <Fieldset.Root size="lg" disabled>
+            <Fieldset.Content>
+              <Flex direction="column" gap={4}>
+                <Stack direction="column" gap={2}>
+                  <InputField
+                    label="Email"
+                    value={data?.email}
+                    startElement={<MailIcon size={16} />}
+                    orientation={{
+                      base: "vertical",
+                      md: "horizontal",
+                    }}
+                  />
 
-                <Input value={data?.email} disabled />
-              </Field.Root>
+                  <InputField
+                    label="Phone"
+                    value={data?.phone}
+                    startElement={<PhoneIcon size={16} />}
+                    orientation={{
+                      base: "vertical",
+                      md: "horizontal",
+                    }}
+                  />
 
-              <Field.Root
-                orientation={{
-                  base: "vertical",
-                  md: "horizontal",
-                }}
-              >
-                <Field.Label gap={2}>
-                  <PhoneIcon size={16} /> Phone:
-                </Field.Label>
+                  <InputField
+                    label="Website"
+                    value={data?.website}
+                    startElement={<GlobeIcon size={16} />}
+                    orientation={{
+                      base: "vertical",
+                      md: "horizontal",
+                    }}
+                  />
+                </Stack>
 
-                <Input value={data?.phone} disabled />
-              </Field.Root>
+                <Stack direction="column" gap={2}>
+                  <Stack direction="row" gap={2} alignItems="center">
+                    <MapPinIcon size={16} />
+                    <Heading size="md">Address</Heading>
+                  </Stack>
 
-              <Field.Root
-                orientation={{
-                  base: "vertical",
-                  md: "horizontal",
-                }}
-              >
-                <Field.Label gap={2}>
-                  <GlobeIcon size={16} /> Website:
-                </Field.Label>
+                  <Separator />
 
-                <Input value={data?.website} disabled />
-              </Field.Root>
-            </Stack>
+                  <Grid
+                    templateColumns={{
+                      md: "repeat(auto-fit, minmax(200px, 1fr))",
+                      base: "repeat(1, 1fr)",
+                    }}
+                    gap={2}
+                  >
+                    <InputField
+                      gridColumn={{
+                        md: "span 2",
+                        base: "span 1",
+                      }}
+                      label="Street"
+                      value={data?.address?.street}
+                    />
 
-            <Stack direction="column" gap={2}>
-              <Stack direction="row" gap={2} alignItems="center">
-                <MapPinIcon size={16} />
-                <Heading size="md">Address</Heading>
-              </Stack>
+                    <InputField label="Suite" value={data?.address?.suite} />
 
-              <Separator />
+                    <InputField label="City" value={data?.address?.city} />
 
-              <Grid
-                templateColumns={{
-                  md: "repeat(auto-fit, minmax(200px, 1fr))",
-                  base: "repeat(1, 1fr)",
-                }}
-                gap={2}
-              >
-                <Field.Root
-                  gridColumn={{
-                    md: "span 2",
-                    base: "span 1",
-                  }}
-                >
-                  <Field.Label gap={2}>Street</Field.Label>
-
-                  <Input value={data?.address?.street} disabled />
-                </Field.Root>
-
-                <Field.Root gridColumn="span 1">
-                  <Field.Label gap={2}>Suite</Field.Label>
-
-                  <Input value={data?.address?.suite} disabled />
-                </Field.Root>
-
-                <Field.Root gridColumn="span 1">
-                  <Field.Label gap={2}>City</Field.Label>
-
-                  <Input value={data?.address?.city} disabled />
-                </Field.Root>
-
-                <Field.Root gridColumn="span 1">
-                  <Field.Label gap={2}>ZipCode</Field.Label>
-
-                  <Input value={data?.address?.zipcode} disabled />
-                </Field.Root>
-              </Grid>
-            </Stack>
-          </Grid>
+                    <InputField
+                      label="ZipCode"
+                      value={data?.address?.zipcode}
+                    />
+                  </Grid>
+                </Stack>
+              </Flex>
+            </Fieldset.Content>
+          </Fieldset.Root>
         </Card.Body>
       </Card.Root>
     </Stack>
