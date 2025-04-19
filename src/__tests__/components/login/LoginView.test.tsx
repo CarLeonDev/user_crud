@@ -1,19 +1,9 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { LoginView } from "../../../components/login/LoginView";
 import { useRouter } from "next/navigation";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { LoginView } from "@/components/login/LoginView";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import Provider from "@/app/provider";
 import { TEST_IDS } from "@/constants";
-
-// Mock the next/navigation router
-jest.mock("next/navigation", () => ({
-  useRouter: jest.fn(),
-}));
-
-// Mock the useLocalStorage hook
-jest.mock("@/hooks/useLocalStorage", () => ({
-  useLocalStorage: jest.fn(),
-}));
 
 describe("LoginView", () => {
   const mockRouter = {

@@ -6,11 +6,6 @@ import { useHydration } from "@/hooks/useHydration";
 import Provider from "@/app/provider";
 import { TEST_IDS } from "@/constants";
 
-// Mock the hooks
-jest.mock("@/hooks/useLocalStorage");
-jest.mock("next/navigation");
-jest.mock("@/hooks/useHydration");
-
 describe("LogoutButton", () => {
   const mockSetToken = jest.fn();
   const mockPush = jest.fn();

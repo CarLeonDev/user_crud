@@ -4,6 +4,7 @@ import { LoginForm } from "@/components/login/LoginForm";
 import userEvent from "@testing-library/user-event";
 import Provider from "@/app/provider";
 import { TEST_IDS } from "@/constants";
+
 describe("LoginForm", () => {
   const mockOnSubmit = jest.fn();
 
