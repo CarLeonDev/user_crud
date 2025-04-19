@@ -5,6 +5,7 @@ import { IconButton } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { LogOut } from "lucide-react";
 import { useHydration } from "@/hooks/useHydration";
+import { TEST_IDS } from "@/constants";
 
 export const LogoutButton = () => {
   const isHydrated = useHydration();
@@ -23,7 +24,7 @@ export const LogoutButton = () => {
     <IconButton
       variant="ghost"
       aria-label="Logout"
-      data-testid="logout-button"
+      data-testid={TEST_IDS.LOGOUT_BUTTON}
       onClick={handleLogout}
     >
       <LogOut />

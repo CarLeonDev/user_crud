@@ -3,7 +3,7 @@ import { render } from "@testing-library/react";
 import { LoginForm } from "@/components/login/LoginForm";
 import userEvent from "@testing-library/user-event";
 import Provider from "@/app/provider";
-
+import { TEST_IDS } from "@/constants";
 describe("LoginForm", () => {
   const mockOnSubmit = jest.fn();
 
@@ -16,8 +16,8 @@ describe("LoginForm", () => {
       wrapper: Provider,
     });
 
-    expect(getByTestId("email-input")).toBeInTheDocument();
-    expect(getByTestId("password-input")).toBeInTheDocument();
+    expect(getByTestId(TEST_IDS.EMAIL_INPUT)).toBeInTheDocument();
+    expect(getByTestId(TEST_IDS.PASSWORD_INPUT)).toBeInTheDocument();
   });
 
   it("calls onSubmit with email and password when form is submitted", async () => {
@@ -25,9 +25,9 @@ describe("LoginForm", () => {
       wrapper: Provider,
     });
 
-    const emailInput = getByTestId("email-input");
-    const passwordInput = getByTestId("password-input");
-    const submitButton = getByTestId("submit-button");
+    const emailInput = getByTestId(TEST_IDS.EMAIL_INPUT);
+    const passwordInput = getByTestId(TEST_IDS.PASSWORD_INPUT);
+    const submitButton = getByTestId(TEST_IDS.SUBMIT_BUTTON);
 
     await userEvent.type(emailInput, "test@example.com");
     await userEvent.type(passwordInput, "password123");
@@ -44,8 +44,8 @@ describe("LoginForm", () => {
       wrapper: Provider,
     });
 
-    const passwordInput = getByTestId("password-input");
-    const submitButton = getByTestId("submit-button");
+    const passwordInput = getByTestId(TEST_IDS.PASSWORD_INPUT);
+    const submitButton = getByTestId(TEST_IDS.SUBMIT_BUTTON);
 
     await userEvent.type(passwordInput, "password123");
     await userEvent.click(submitButton);
@@ -58,8 +58,8 @@ describe("LoginForm", () => {
       wrapper: Provider,
     });
 
-    const emailInput = getByTestId("email-input");
-    const submitButton = getByTestId("submit-button");
+    const emailInput = getByTestId(TEST_IDS.EMAIL_INPUT);
+    const submitButton = getByTestId(TEST_IDS.SUBMIT_BUTTON);
 
     await userEvent.type(emailInput, "test@example.com");
     await userEvent.click(submitButton);
@@ -72,9 +72,9 @@ describe("LoginForm", () => {
       wrapper: Provider,
     });
 
-    const emailInput = getByTestId("email-input");
-    const passwordInput = getByTestId("password-input");
-    const submitButton = getByTestId("submit-button");
+    const emailInput = getByTestId(TEST_IDS.EMAIL_INPUT);
+    const passwordInput = getByTestId(TEST_IDS.PASSWORD_INPUT);
+    const submitButton = getByTestId(TEST_IDS.SUBMIT_BUTTON);
 
     await userEvent.type(emailInput, "invalid-email");
     await userEvent.type(passwordInput, "password123");

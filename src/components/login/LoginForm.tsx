@@ -1,6 +1,7 @@
 "use client";
 import React, { useRef } from "react";
 import { Input, Button, Stack } from "@chakra-ui/react";
+import { TEST_IDS } from "@/constants";
 
 type LoginFormProps = {
   onSubmit: (email: string, password: string) => void;
@@ -32,7 +33,7 @@ export const LoginForm = ({ onSubmit }: LoginFormProps) => {
             name="email"
             required
             maxLength={255}
-            data-testid="email-input"
+            data-testid={TEST_IDS.EMAIL_INPUT}
           />
 
           <Input
@@ -41,11 +42,11 @@ export const LoginForm = ({ onSubmit }: LoginFormProps) => {
             name="password"
             required
             maxLength={255}
-            data-testid="password-input"
+            data-testid={TEST_IDS.PASSWORD_INPUT}
           />
         </Stack>
 
-        <Button type="submit" data-testid="submit-button">
+        <Button type="submit" data-testid={TEST_IDS.SUBMIT_BUTTON}>
           Log In
         </Button>
       </Stack>

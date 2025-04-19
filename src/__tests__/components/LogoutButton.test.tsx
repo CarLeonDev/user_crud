@@ -4,6 +4,7 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useRouter } from "next/navigation";
 import { useHydration } from "@/hooks/useHydration";
 import Provider from "@/app/provider";
+import { TEST_IDS } from "@/constants";
 
 // Mock the hooks
 jest.mock("@/hooks/useLocalStorage");
@@ -29,24 +30,28 @@ describe("LogoutButton", () => {
 
   it("renders when hydrated and token exists", () => {
     render(<LogoutButton />, { wrapper: Provider });
-    expect(screen.getByTestId("logout-button")).toBeInTheDocument();
+    expect(screen.getByTestId(TEST_IDS.LOGOUT_BUTTON)).toBeInTheDocument();
   });
 
   it("does not render when not hydrated", () => {
     (useHydration as jest.Mock).mockReturnValue(false);
     render(<LogoutButton />, { wrapper: Provider });
-    expect(screen.queryByTestId("logout-button")).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId(TEST_IDS.LOGOUT_BUTTON)
+    ).not.toBeInTheDocument();
   });
 
   it("does not render when no token exists", () => {
     (useLocalStorage as jest.Mock).mockReturnValue([null, mockSetToken]);
     render(<LogoutButton />, { wrapper: Provider });
-    expect(screen.queryByTestId("logout-button")).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId(TEST_IDS.LOGOUT_BUTTON)
+    ).not.toBeInTheDocument();
   });
 
   it("clears token and redirects to login when clicked", () => {
     render(<LogoutButton />, { wrapper: Provider });
-    fireEvent.click(screen.getByTestId("logout-button"));
+    fireEvent.click(screen.getByTestId(TEST_IDS.LOGOUT_BUTTON));
 
     expect(mockSetToken).toHaveBeenCalledWith(null);
     expect(mockPush).toHaveBeenCalledWith("/login");
