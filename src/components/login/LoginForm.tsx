@@ -32,6 +32,7 @@ export const LoginForm = ({ onSubmit }: LoginFormProps) => {
             name="email"
             required
             maxLength={255}
+            data-testid="email-input"
           />
 
           <Input
@@ -40,10 +41,13 @@ export const LoginForm = ({ onSubmit }: LoginFormProps) => {
             name="password"
             required
             maxLength={255}
+            data-testid="password-input"
           />
         </Stack>
 
-        <Button type="submit">Log In</Button>
+        <Button type="submit" data-testid="submit-button">
+          Log In
+        </Button>
       </Stack>
     </form>
   );
