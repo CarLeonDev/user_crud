@@ -19,6 +19,7 @@ import {
 } from "@chakra-ui/react";
 import { useMeasure } from "@/hooks/useMeasure";
 import { renderToString } from "react-dom/server";
+import { TEST_IDS } from "@/constants";
 
 type Action = {
   label: string;
@@ -53,7 +54,7 @@ type InfiniteTableProps = React.TableHTMLAttributes<HTMLTableElement> & {
   /** Actions to display in the last column */
   actions?: Action[];
   /** Callback function when a row is clicked */
-  onRowClick?: (row: Row<any>) => void;
+  onRowClick?: (rowData: any) => void;
 };
 
 /**
@@ -163,6 +164,7 @@ export const InfiniteTable = React.forwardRef<
           h="min-content"
           maxH={fullHeight ? `${height}px` : "auto"}
           onScroll={(e) => fetchMoreOnBottomReached(e.currentTarget)}
+          data-testid={TEST_IDS.INFINITE_TABLE}
         >
           <Table.Header
             display="grid"
@@ -171,6 +173,7 @@ export const InfiniteTable = React.forwardRef<
             gridTemplateColumns="1fr"
             gridTemplateRows="auto"
             zIndex={10}
+            data-testid={TEST_IDS.INFINITE_TABLE_HEADER}
           >
             {table.getHeaderGroups().map((headerGroup) => (
               <Table.Row key={headerGroup.id} display="flex" w="100%">
@@ -229,13 +232,15 @@ export const InfiniteTable = React.forwardRef<
               rowVirtualizer.getTotalSize() +
               (isEmpty || isLoading ? ESTIMATE_ROW_HEIGHT : 0)
             }px`}
+            data-testid={TEST_IDS.INFINITE_TABLE_BODY}
           >
             {rowVirtualizer.getVirtualItems().map((virtualRow) => {
               const row = rows[virtualRow.index] as Row<any>;
 
               return (
                 <TableRow
-                  key={row.id}
+                  key={row?.id}
+                  data-testid={`${TEST_IDS.INFINITE_TABLE_ROW}-${virtualRow.index}`}
                   ref={(node) => rowVirtualizer.measureElement(node)} //measure dynamic row height
                   data-index={virtualRow.index} //needed for dynamic row height measurement
                   position="absolute"
@@ -246,9 +251,9 @@ export const InfiniteTable = React.forwardRef<
                     transform: `translateY(${virtualRow.start}px)`,
                   }}
                   cursor={onRowClick ? "pointer" : "default"}
-                  onClick={() => onRowClick?.(row)}
+                  onClick={() => onRowClick?.(row.original)}
                 >
-                  {row.getVisibleCells().map((cell) => {
+                  {row?.getVisibleCells().map((cell) => {
                     const cellValue = flexRender(
                       cell.column.columnDef.cell,
                       cell.getContext()
@@ -312,6 +317,7 @@ export const InfiniteTable = React.forwardRef<
                 style={{
                   transform: `translateY(${rowVirtualizer.getTotalSize()}px)`,
                 }}
+                data-testid={TEST_IDS.INFINITE_TABLE_LOADING_ROW}
               >
                 <TableCell
                   display="flex"
@@ -326,7 +332,11 @@ export const InfiniteTable = React.forwardRef<
             )}
 
             {!isLoading && isEmpty && (
-              <TableRow display="flex" w="100%">
+              <TableRow
+                display="flex"
+                w="100%"
+                data-testid={TEST_IDS.INFINITE_TABLE_EMPTY_ROW}
+              >
                 <TableCell w="100%">No data available</TableCell>
               </TableRow>
             )}
