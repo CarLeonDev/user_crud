@@ -40,6 +40,7 @@ export const LoginForm = ({ onSubmit }: LoginFormProps) => {
               type: "email",
               name: "email",
               required: true,
+              autoFocus: true,
               maxLength: 255,
             }}
           />
